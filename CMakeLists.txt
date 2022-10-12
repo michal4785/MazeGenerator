@@ -3,4 +3,4 @@ project(MazeGenerator)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(MazeGenerator main.cpp Wall.cpp Wall.h Coords.h Tile.cpp Tile.h Generator.cpp Generator.h Maze.cpp Maze.h)
+add_executable(MazeGenerator main.cpp Wall.cpp Wall.h Tile.cpp Tile.h Generator.cpp Generator.h Maze.cpp Maze.h)

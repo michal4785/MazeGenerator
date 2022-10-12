@@ -4,7 +4,7 @@
 
 #include "Maze.h"
 
-Maze::Maze(int columns, int rows){
+Maze::Maze(int rows, int columns){
     this->columns = columns;
     this->rows = rows;
     for (int i = 0; i < 2*rows+1; ++i) {
@@ -18,7 +18,7 @@ Maze::Maze(int columns, int rows){
     for (int i = 0; i < rows; ++i) {
         std::vector<Tile> row;
         for (int j = 0; j < columns; ++j) {
-            row.push_back(Tile(i, j));
+            row.emplace_back(i, j);
         }
         tiles.push_back(row);
     }
@@ -74,25 +74,43 @@ void Maze::visitTile(int y, int x){
     tiles.at(y).at(x).visit();
 }
 
-std::vector<int> Maze::getCoordOfWallBetweenTiles(std::vector<int> tile1, std::vector<int> tile2){
-    int y;
-    int x = tile1.at(1);
-    if(tile1.at(0) == tile2.at(0)){
-        y = (tile1.at(0)-1)/2;
-    }
-    else if(tile1.at(1) == tile2.at(1)){
+void Maze::ruinWall(int y, int x){
+    walls.at(y).at(x).ruin();
+}
 
+std::vector<int> Maze::getCoordOfWallBetweenTiles(std::vector<int> tile1, std::vector<int> tile2){
+    int finalY;
+    int finalX;
+    int y1 = tile1.at(0), y2 = tile2.at(0);
+    int x1 = tile1.at(1), x2 = tile2.at(1);
+    if(y1 == y2){
+        finalY = y1*2+1;
+        if(x1 < x2){
+            finalX = x2;
+        }
+        else{
+            finalX = x1;
+        }
+    }
+    else if(x1 == x2){
+        if(y1 < y2){
+            finalY = y2*2;
+        }
+        else{
+            finalY = y1*2;
+        }
+        finalX = x1;
     }
     else{
         throw std::exception("These tiles have not a shared wall!\n");
     }
-    return {y, x};
+    return {finalY, finalX};
 }
 
 void Maze::setTileOnThePath(int y, int x){
     tiles.at(y).at(x).setOnThePath();
 }
-bool Maze::areCoordsInside(int y, int x){
+bool Maze::areCoordsInside(int y, int x) const{
     return y >= 0 && x >= 0 && y < rows && x < columns;
 }
 
@@ -107,9 +125,9 @@ bool Maze::allTilesVisited(){
     return true;
 }
 
-int  Maze::getRows(){
+int  Maze::getRows() const{
     return rows;
 }
-int  Maze::getColumns(){
+int  Maze::getColumns() const{
     return columns;
 }

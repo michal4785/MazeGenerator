@@ -13,17 +13,18 @@ class Maze {
 
 
     public:
-        Maze(int columns, int rows);
+        Maze(int rows, int columns);
         void printMaze();
         Wall& getWall(int y, int x);
         Tile& getTile(int y, int x);
         void visitTile(int y, int x);
-        std::vector<int> getCoordOfWallBetweenTiles(std::vector<int> tile1, std::vector<int> tile2);
+        void ruinWall(int y, int x);
+        static std::vector<int> getCoordOfWallBetweenTiles(std::vector<int> tile1, std::vector<int> tile2);
         void setTileOnThePath(int y, int x);
-        bool areCoordsInside(int y, int x);
+        bool areCoordsInside(int y, int x) const;
         bool allTilesVisited();
-        int getRows();
-        int getColumns();
+        int getRows() const;
+        int getColumns() const;
 
     private:
         int columns;

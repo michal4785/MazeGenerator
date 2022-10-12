@@ -54,9 +54,9 @@
 			[
 				0,
 				1,
-				4,
-				6,
-				8
+				3,
+				5,
+				7
 			]
 		}
 	],
@@ -95,9 +95,9 @@
 			[
 				0,
 				1,
-				4,
-				6,
-				8
+				3,
+				5,
+				7
 			]
 		},
 		{
@@ -105,10 +105,9 @@
 			"sourceIndexes" : 
 			[
 				2,
-				3,
-				5,
-				7,
-				9
+				4,
+				6,
+				8
 			]
 		}
 	],
@@ -129,11 +128,6 @@
 		{
 			"backtrace" : 1,
 			"path" : "Wall.h",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"path" : "Coords.h",
 			"sourceGroupIndex" : 1
 		},
 		{

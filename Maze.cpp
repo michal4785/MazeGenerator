@@ -11,9 +11,6 @@ Maze::Maze(int columns, int rows){
         std::vector<Wall> row;
         for (int j = 0; j < columns; ++j) {
             Wall wall = Wall(i, j);
-            if(i == 0 || (i % 2 != 0 && j == 0)  || i == 2*rows){
-                wall.set();
-            }
             row.push_back(wall);
         }
         walls.push_back(row);
@@ -73,6 +70,28 @@ Wall& Maze::getWall(int y, int x){
 Tile& Maze::getTile(int y, int x){
     return tiles.at(y).at(x);
 }
+void Maze::visitTile(int y, int x){
+    tiles.at(y).at(x).visit();
+}
+
+std::vector<int> Maze::getCoordOfWallBetweenTiles(std::vector<int> tile1, std::vector<int> tile2){
+    int y;
+    int x = tile1.at(1);
+    if(tile1.at(0) == tile2.at(0)){
+        y = (tile1.at(0)-1)/2;
+    }
+    else if(tile1.at(1) == tile2.at(1)){
+
+    }
+    else{
+        throw std::exception("These tiles have not a shared wall!\n");
+    }
+    return {y, x};
+}
+
+void Maze::setTileOnThePath(int y, int x){
+    tiles.at(y).at(x).setOnThePath();
+}
 bool Maze::areCoordsInside(int y, int x){
     return y >= 0 && x >= 0 && y < rows && x < columns;
 }
@@ -80,7 +99,7 @@ bool Maze::areCoordsInside(int y, int x){
 bool Maze::allTilesVisited(){
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
-            if(!tiles.at(i).at(j).isVisited()){
+            if(!(tiles.at(i).at(j).isVisited())){
                 return false;
             }
         }

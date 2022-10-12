@@ -7,7 +7,7 @@
 Wall::Wall(int y, int x){
     this->y = y;
     this->x = x;
-    this->isSet = false;
+    this->isSet = true;
 }
 void Wall::set(){
     this->isSet = true;

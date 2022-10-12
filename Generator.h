@@ -7,6 +7,7 @@
 #include "Tile.h"
 #include <vector>
 #include "Maze.h"
+#include <time.h>
 class Generator {
 public:
     Generator()= default;
@@ -25,7 +26,7 @@ public:
         potentialMoves.push_back({currentY+1, currentX});
         return potentialMoves;
     }
-    bool forward(Maze &maze,std::vector<Tile> &tracker, int currentY, int currentX){
+    bool forward(Maze &maze,std::vector<std::vector<int>> &tracker, int currentY, int currentX){
         std::vector<std::vector<int>> potentialMoves = generatePotentialMoves(currentY, currentX);
         std::vector<std::vector<int>> moves;
         for (std::vector<int> & potentialMove : potentialMoves) {
@@ -38,35 +39,45 @@ public:
             }
         }
         if(!moves.empty()){
+            srand (time(NULL));
             std::vector<int> move = moves.at(rand() % moves.size());
-            tracker.push_back(maze.getTile(move.at(0), move.at(1)));
-            tracker.at(tracker.size()-1).visit();
+            tracker.push_back(move);
+            maze.visitTile(move.at(0), move.at(1));
             return true;
         }
         else{
             return false;
         }
     }
-    void backward(std::vector<Tile> &tracker){
+    void backward(std::vector<std::vector<int>>& tracker){
         printf("TrackerSize: %d\n", tracker.size());
         tracker.pop_back();
     }
+    void updateCoords(std::vector<std::vector<int>> &tracker, int &y, int&x){
+        y = tracker.at(tracker.size()-1).at(0);
+        x = tracker.at(tracker.size()-1).at(1);
+    }
     void backTracker(Maze &maze){
-        std::vector<Tile> tracker;
-        tracker.push_back(maze.getTile(0, 0));
-        while(!maze.allTilesVisited()){
-            int y = tracker.at(tracker.size()-1).getY();
-            int x = tracker.at(tracker.size()-1).getX();
-            printf("Y: %d, X: %d\n", y, x);
+        int y, x;
+        std::vector<std::vector<int>> tracker;
+        // tracker.push_back(maze.getTile(0, 0));
+        tracker.push_back({0, 0});
+        printf("%d\n", maze.getTile(0, 0).isVisited());
+        while(!(maze.allTilesVisited())){
+            updateCoords(tracker, y, x);
+            // printf("Y: %d, X: %d\n", y, x);
             while(!forward(maze, tracker, y, x)){
                 backward(tracker);
+                updateCoords(tracker, y, x);
             }
+            updateCoords(tracker, y, x);
             if(y == maze.getRows()-1 && x == maze.getColumns()-1){
-                for (Tile & i : tracker) {
-                    i.setOnThePath();
+                // printf("\nPath! TrackerSize: %d\n", tracker.size());
+                for (int i = 0; i < tracker.size(); ++i) {
+                    y = tracker.at(i).at(0);
+                    x = tracker.at(i).at(1);
+                    maze.setTileOnThePath(y, x);
                 }
-                printf("Path! TrackerSize: %d\n", tracker.size());
-                maze.printMaze();
             }
         }
 

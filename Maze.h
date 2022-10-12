@@ -17,6 +17,9 @@ class Maze {
         void printMaze();
         Wall& getWall(int y, int x);
         Tile& getTile(int y, int x);
+        void visitTile(int y, int x);
+        std::vector<int> getCoordOfWallBetweenTiles(std::vector<int> tile1, std::vector<int> tile2);
+        void setTileOnThePath(int y, int x);
         bool areCoordsInside(int y, int x);
         bool allTilesVisited();
         int getRows();
